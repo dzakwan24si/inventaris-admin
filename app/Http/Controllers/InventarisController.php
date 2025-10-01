@@ -38,7 +38,7 @@ class InventarisController extends Controller
         ];
 
         // Passing data ke view
-        return view('admin.inventaris', $dataInventaris);
+        return view('home-inventaris', $dataInventaris);
     }
 
     /**
