@@ -6,31 +6,62 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('auth.login-form');
     }
 
+    public function registerForm()
+    {
+        return view('auth.register-form');
+    }
+
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required|max:20',
-            'password' => 'required|min:3|regex:/[A-Z]/',
-        ], [
-            'username.required' => 'Username tidak boleh kosong',
-            'username.max' => 'Username maksimal 20 karakter',
-            'password.required' => 'Password tidak boleh kosong',
-            'password.min' => 'Password minimal 3 karakter',
-            'password.regex' => 'Password harus mengandung setidaknya satu huruf kapital'
+            'username' => 'required',
+            'password' => 'required'
         ]);
 
-        $data['username'] = $request->username;
-        $data['password'] = $request->password;
+        $username = $request->username;
+        $password = $request->password;
 
-        return view('auth.login-success', $data);
+        // Cek jika username = nim dan password = nim
+        if ($username === 'nim' && $password === 'nim') {
+            return redirect('/home')->with('success', 'Selamat Datang Admin!');
+        }
+
+        // Untuk demo, jika bukan admin maka tampilkan pesan error
+        return redirect()->back()->withErrors([
+            'login' => 'Username atau password salah!'
+        ])->withInput();
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|regex:/^[a-zA-Z\s]+$/',
+            'alamat' => 'required|max:300',
+            'tanggal_lahir' => 'required|date',
+            'username' => 'required',
+            'password' => 'required|min:6|regex:/^(?=.*[A-Z])(?=.*\d)/',
+            'confirm_password' => 'required|same:password'
+        ], [
+            'nama.required' => 'Nama harus diisi',
+            'nama.regex' => 'Nama tidak boleh mengandung angka',
+            'alamat.required' => 'Alamat harus diisi',
+            'alamat.max' => 'Alamat maksimal 300 karakter',
+            'tanggal_lahir.required' => 'Tanggal lahir harus diisi',
+            'tanggal_lahir.date' => 'Format tanggal lahir tidak valid',
+            'password.required' => 'Password harus diisi',
+            'password.min' => 'Password minimal 6 karakter',
+            'password.regex' => 'Password harus mengandung huruf kapital dan angka',
+            'confirm_password.required' => 'Konfirmasi password harus diisi',
+            'confirm_password.same' => 'Password dan konfirmasi password tidak sama'
+        ]);
+
+        // Jika validasi berhasil, redirect ke login dengan pesan sukses
+        return redirect()->route('auth.login.form')->with('success', 'Registrasi berhasil! Silakan Login');
     }
 
     /**
