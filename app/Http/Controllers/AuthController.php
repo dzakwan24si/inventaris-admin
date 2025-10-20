@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         // Cek jika username = nim dan password = nim
         if ($username === 'nim' && $password === 'nim') {
-            return redirect('/home')->with('success', 'Selamat Datang Admin!');
+            return redirect('/dashboard')->with('success', 'Selamat Datang Admin!');
         }
 
         // Untuk demo, jika bukan admin maka tampilkan pesan error

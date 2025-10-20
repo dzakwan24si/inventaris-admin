@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AsetController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WargaController;
 use App\Http\Controllers\InventarisController;
 
 Route::get('/', function () {
@@ -18,10 +20,12 @@ Route::get('/auth/register', [AuthController::class, 'registerForm'])->name('aut
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 
 // Route untuk dashboard admin
-Route::get('/dashboard', function () {
-    return view('dashboard.dashboard');
-})->name('dashboard');
+Route::get('/dashboard', [InventarisController::class, 'index'])->name('dashboard');
 
 Route::get('/', function () {
     return redirect('/auth/login');
 });
+
+Route::resource('aset', AsetController::class);
+
+Route::resource('warga', WargaController::class);

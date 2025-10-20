@@ -11,6 +11,7 @@ class InventarisController extends Controller
      */
     public function index()
     {
+        // Data statis seperti yang Anda inginkan
         $dataInventaris = [
             'total_aset' => 15,
             'aset_baik' => 12,
@@ -37,8 +38,10 @@ class InventarisController extends Controller
             ]
         ];
 
-        // Passing data ke view
-        return view('home-inventaris', $dataInventaris);
+        // Kirim array ke view.
+        // Laravel akan secara otomatis mengubah key array ('total_aset', dll.)
+        // menjadi variabel ($total_aset, dll.) di dalam view.
+        return view('dashboard.dashboard', $dataInventaris);
     }
 
     /**
