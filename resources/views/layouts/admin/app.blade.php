@@ -2,6 +2,12 @@
 <html lang="id">
 <head>
     @include('layouts.admin.css')
+    <style>
+        .sidebar-wrapper .logo img {
+            height: 55px !important;
+            width: auto !important;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
