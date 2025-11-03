@@ -18,11 +18,12 @@
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
-                    <div class="logo">
-                        <a href="{{ route('dashboard') }}"><img style="width: 350px; height: auto; center;"
-                                src="{{ asset('assets-admin/images/logo/logo-baru.png') }}" alt="Logo"></a>
+                    <div class="logo" style="text-align: center; margin-bottom: 1rem;">
+                        <a href="{{ route('dashboard') }}">
+                            <img style="width: 350px; height: auto; max-width: 90%;"
+                                 src="{{ asset('assets-admin/images/logo/logo-baru.png') }}" alt="Logo">
+                        </a>
                     </div>
-
                     <h1 class="auth-title">Registrasi Akun</h1>
                     <p class="auth-subtitle mb-5">Isi data Anda untuk menjadi pengelola sistem.</p>
 

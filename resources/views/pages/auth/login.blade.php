@@ -18,12 +18,12 @@
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
-                    <div class="logo">
-                        <a href="{{ route('dashboard') }}"><img style="width: 350px; height: auto; center;"
-                                src="{{ asset('assets-admin/images/logo/logo-baru.png') }}" alt="Logo"></a>
+                    <div class="logo" style="text-align: center; margin-bottom: 1rem;">
+                        <a href="{{ route('dashboard') }}">
+                            <img style="width: 350px; height: auto; max-width: 90%;"
+                                 src="{{ asset('assets-admin/images/logo/logo-baru.png') }}" alt="Logo">
+                        </a>
                     </div>
-
-                    {{-- TULISAN JUDUL BARU --}}
                     <h1 class="auth-title">Sistem Inventaris Aset</h1>
                     <p class="auth-subtitle mb-5">Silakan masuk untuk mengelola data aset.</p>
 
@@ -75,10 +75,11 @@
                 </div>
             </div>
 
+            {{-- Bagian Kanan (Gambar Background) --}}
             <div class="col-lg-7 d-none d-lg-block">
                 <div id="auth-right"
                     style="
-                    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ asset('assets-admin/images/bg/inventaris-bg.jpg') }}');
+                    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{{ asset('assets-admin/images/bg/inventaris-bg.jpg') }}');
                     background-size: cover;
                     background-position: center;
                     display: flex;
@@ -89,8 +90,8 @@
                     text-align: center;
                     color: white;
                 ">
-                    <h2 style="text-shadow: 2px 2px 4px rgba(29, 27, 27, 0.7);">Manajemen Aset Digital</h2>
-                    <p style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7); font-size: 1.2rem;">
+                    <h2>Manajemen Aset Digital</h2>
+                    <p style="font-size: 1.2rem;">
                         Kelola semua aset Anda dengan mudah, terpusat, dan efisien.
                     </p>
                 </div>
