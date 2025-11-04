@@ -30,8 +30,8 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('user.create') }}" class="btn btn-primary d-inline-flex align-items-center">
-                        <i class="bi bi-plus-circle me-2"></i> Tambah User Baru
+                    <a href="{{ route('aset.create') }}" class="btn btn-primary d-inline-flex align-items-center">
+                        <i class="bi bi-plus-circle me-2"></i> Tambah Aset Baru
                     </a>
                 </div>
                 <div class="card-body">
