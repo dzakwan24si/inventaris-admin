@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\KategoriAsetController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,3 +34,5 @@ Route::resource('aset', AsetController::class);
 Route::resource('warga', WargaController::class);
 
 Route::resource('user', UserController::class);
+
+Route::resource('kategori', KategoriAsetController::class);

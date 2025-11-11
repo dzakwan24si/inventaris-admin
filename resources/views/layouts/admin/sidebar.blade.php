@@ -20,6 +20,12 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="sidebar-item {{ request()->routeIs('kategori.*') ? 'active' : '' }}">
+                    <a href="{{ route('kategori.index') }}" class='sidebar-link'>
+                        <i class="bi bi-tags-fill"></i>
+                        <span>Kategori Aset</span>
+                    </a>
+                </li>
                 <li class="sidebar-item {{ request()->routeIs('aset.*') ? 'active' : '' }}">
                     <a href="{{ route('aset.index') }}" class='sidebar-link'>
                         <i class="bi bi-stack"></i>

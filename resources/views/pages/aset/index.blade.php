@@ -30,8 +30,8 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('user.create') }}" class="btn btn-primary d-inline-flex align-items-center">
-                        <i class="bi bi-plus-circle me-2"></i> Tambah User Baru
+                    <a href="{{ route('aset.create') }}" class="btn btn-primary d-inline-flex align-items-center">
+                        <i class="bi bi-plus-circle me-2"></i> Tambah Aset Baru
                     </a>
                 </div>
                 <div class="card-body">
@@ -61,7 +61,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $aset->kode_aset }}</td>
                                     <td>{{ $aset->nama_aset }}</td>
-                                    <td>{{ $aset->kategori }}</td>
+                                    <td>{{ $aset->kategoriAset->nama ?? 'N/A' }}</td>
                                     <td>
                                         @if ($aset->kondisi == 'Baik')
                                             <span class="badge bg-success">Baik</span>

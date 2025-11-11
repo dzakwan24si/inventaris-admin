@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aset;
+use App\Models\KategoriAset;
 use Illuminate\Http\Request;
 
 class AsetController extends Controller
@@ -12,7 +13,7 @@ class AsetController extends Controller
      */
     public function index()
     {
-        $asets = Aset::latest()->get();
+        $asets = Aset::with('kategoriAset')->latest()->get();
         return view('pages.aset.index', compact('asets'));
     }
 
@@ -21,7 +22,8 @@ class AsetController extends Controller
      */
     public function create()
     {
-        return view('pages.aset.create');
+        $kategoris = KategoriAset::all(); // Ambil semua kategori
+        return view('pages.aset.create', compact('kategoris'));
     }
 
     /**
@@ -32,7 +34,7 @@ class AsetController extends Controller
         $request->validate([
             'kode_aset' => 'required|unique:asets,kode_aset',
             'nama_aset' => 'required',
-            'kategori' => 'required',
+            'kategori_id' => 'required|exists:kategori_asets,kategori_id',
             'tanggal_perolehan' => 'required|date',
             'nilai_perolehan' => 'required|numeric',
             'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
@@ -59,7 +61,8 @@ class AsetController extends Controller
      */
     public function edit(Aset $aset)
     {
-        return view('pages.aset.edit', compact('aset'));
+        $kategoris = KategoriAset::all(); // Ambil semua kategori
+        return view('pages.aset.edit', compact('aset', 'kategoris'));
     }
 
     /**
@@ -68,9 +71,9 @@ class AsetController extends Controller
     public function update(Request $request, Aset $aset)
     {
         $request->validate([
-            'kode_aset' => 'required|unique:asets,kode_aset,' . $aset->id,
+            'kode_aset' => 'required|unique:asets,kode_aset,' . $aset->id . ',id',
             'nama_aset' => 'required',
-            'kategori' => 'required',
+            'kategori_id' => 'required|exists:kategori_asets,kategori_id', // Validasi baru
             'tanggal_perolehan' => 'required|date',
             'nilai_perolehan' => 'required|numeric',
             'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
@@ -79,9 +82,7 @@ class AsetController extends Controller
         ]);
 
         $aset->update($request->all());
-
-        return redirect()->route('aset.index')
-            ->with('success', 'Data aset berhasil diperbarui!');
+        return redirect()->route('aset.index')->with('success', 'Data aset berhasil diperbarui!');
     }
 
     /**
@@ -90,8 +91,6 @@ class AsetController extends Controller
     public function destroy(Aset $aset)
     {
         $aset->delete();
-
-        return redirect()->route('aset.index')
-            ->with('success', 'Data aset berhasil dihapus!');
+        return redirect()->route('aset.index')->with('success', 'Data aset berhasil dihapus!');
     }
 }

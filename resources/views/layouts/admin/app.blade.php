@@ -18,7 +18,7 @@
             border-radius: 50%;
             text-align: center;
             font-size: 30px; /* Ukuran icon */
-            line-height: 60px; /* Pusatkan icon secara vertikal */
+            line-height: 70px; /* Pusatkan icon secara vertikal */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             z-index: 100;
             transition: 0.3s;
