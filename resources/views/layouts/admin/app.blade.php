@@ -42,6 +42,7 @@
         </div>
     </div>
     @include('layouts.admin.js')
+
     <a href="https://wa.me/628982124281?text=Halo%20Admin,%20saya%20mau%20bertanya..."
        class="whatsapp-float"
        target="_blank">
