@@ -9,7 +9,7 @@ class WargaController extends Controller
 {
     public function index()
     {
-        $wargas = Warga::latest()->paginate(10);
+        $wargas = Warga::latest()->get();
         return view('pages.warga.index', compact('wargas'));
     }
 
