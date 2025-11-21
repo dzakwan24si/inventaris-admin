@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 
 class WargaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $wargas = Warga::latest()->get();
+        $columns = ['jenis_kelamin'];
+
+        $wargas = Warga::latest()
+                ->filter($request, $columns) // Panggil scopeFilter
+                ->get();
         return view('pages.warga.index', compact('wargas'));
     }
 

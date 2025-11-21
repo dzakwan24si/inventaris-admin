@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder; // Import Builder
+use Illuminate\Http\Request; // Import Request
 
 class Aset extends Model
 {
@@ -41,5 +43,15 @@ class Aset extends Model
     public function kategoriAset()
     {
         return $this->belongsTo(KategoriAset::class, 'kategori_id', 'kategori_id');
+    }
+
+    public function scopeFilter(Builder $query, Request $request, array $filterableColumns): Builder
+    {
+        foreach ($filterableColumns as $column) {
+            if ($request->filled($column)) {
+                $query->where($column, $request->input($column));
+            }
+        }
+        return $query;
     }
 }

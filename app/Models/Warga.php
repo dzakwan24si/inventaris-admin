@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder; // Import Builder
+use Illuminate\Http\Request;
 
 class Warga extends Model
 {
@@ -23,6 +25,16 @@ class Warga extends Model
         'agama',
         'pekerjaan',
         'telp',
-        'email'
+        'email',
     ];
+
+    public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
+    {
+        foreach ($filterableColumns as $column) {
+            if ($request->filled($column)) {
+                $query->where($column, $request->input($column));
+            }
+        }
+        return $query;
+    }
 }

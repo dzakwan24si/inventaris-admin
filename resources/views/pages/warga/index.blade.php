@@ -29,9 +29,35 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('warga.create') }}" class="btn btn-primary d-inline-flex align-items-center">
-                        <i class="bi bi-plus-circle me-2"></i> Tambah Warga Baru
-                    </a>
+                    <div class="row align-items-center">
+
+                        {{-- Bagian Kiri: Tombol Tambah --}}
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <a href="{{ route('warga.create') }}" class="btn btn-primary d-inline-flex align-items-center">
+                                <i class="bi bi-plus-circle me-2"></i> Tambah Warga Baru
+                            </a>
+                        </div>
+
+                        {{-- Bagian Kanan: Filter (Rata Kanan) --}}
+                        <div class="col-md-6 d-flex justify-content-md-end">
+                            <form action="{{ route('warga.index') }}" method="GET" class="d-flex align-items-center">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="bi bi-funnel"></i> Filter:</span>
+
+                                    <select name="jenis_kelamin" class="form-select" onchange="this.form.submit()" style="min-width: 150px;">
+                                        <option value="">Semua Gender</option>
+                                        <option value="Laki-laki" {{ request('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>
+                                            Laki-laki
+                                        </option>
+                                        <option value="Perempuan" {{ request('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>
+                                            Perempuan
+                                        </option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
                 <div class="card-body">
 

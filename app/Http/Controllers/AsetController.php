@@ -11,9 +11,13 @@ class AsetController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $asets = Aset::with('kategoriAset')->latest()->get();
+        $columns = ['kondisi'];
+        $asets = Aset::with('kategoriAset') // Eager load relasi
+                    ->filter($request, $columns) // Panggil scopeFilter
+                    ->latest()
+                    ->get();
         return view('pages.aset.index', compact('asets'));
     }
 
