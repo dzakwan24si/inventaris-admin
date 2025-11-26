@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aset;
+use App\Models\Media;
 use App\Models\KategoriAset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class AsetController extends Controller
 {
@@ -57,7 +59,13 @@ class AsetController extends Controller
      */
     public function show(Aset $aset)
     {
-        return view('aset.show', compact('aset'));
+        // Ambil data media
+    $files = Media::where('ref_table', 'aset') // Coba pakai nama singular
+              ->where('ref_id', $aset->id)
+              ->latest()
+              ->get();
+
+    return view('pages.aset.show', compact('aset', 'files'));
     }
 
     /**

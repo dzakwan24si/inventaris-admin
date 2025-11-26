@@ -41,15 +41,20 @@
 
                         {{-- KANAN: Filter Kondisi --}}
                         <div class="col-md-6 d-flex justify-content-md-end">
-                            <form action="{{ route('aset.index') }}" method="GET" class="d-flex align-items-center w-100 justify-content-end">
+                            <form action="{{ route('aset.index') }}" method="GET"
+                                class="d-flex align-items-center w-100 justify-content-end">
                                 <div class="input-group" style="max-width: 300px;">
                                     <span class="input-group-text bg-white"><i class="bi bi-funnel"></i> Kondisi:</span>
 
                                     <select name="kondisi" class="form-select" onchange="this.form.submit()">
                                         <option value="">Semua Kondisi</option>
-                                        <option value="Baik" {{ request('kondisi') == 'Baik' ? 'selected' : '' }}>Baik</option>
-                                        <option value="Rusak Ringan" {{ request('kondisi') == 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
-                                        <option value="Rusak Berat" {{ request('kondisi') == 'Rusak Berat' ? 'selected' : '' }}>Rusak Berat</option>
+                                        <option value="Baik" {{ request('kondisi') == 'Baik' ? 'selected' : '' }}>Baik
+                                        </option>
+                                        <option value="Rusak Ringan"
+                                            {{ request('kondisi') == 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan
+                                        </option>
+                                        <option value="Rusak Berat"
+                                            {{ request('kondisi') == 'Rusak Berat' ? 'selected' : '' }}>Rusak Berat</option>
                                     </select>
                                 </div>
                             </form>
@@ -96,6 +101,9 @@
                                     </td>
                                     <td>{{ $aset->lokasi }}</td>
                                     <td>
+                                        <a href="{{ route('aset.show', $aset->id) }}" class="btn btn-info btn-sm">
+                                            <i class="bi bi-eye"></i> Detail
+                                        </a>
                                         <a href="{{ route('aset.edit', $aset->id) }}" class="btn btn-warning btn-sm">
                                             <i class="bi bi-pencil-square"></i> Edit
                                         </a>

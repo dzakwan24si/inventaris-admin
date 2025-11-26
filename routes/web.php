@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\KategoriAsetController;
@@ -36,3 +37,6 @@ Route::resource('warga', WargaController::class);
 Route::resource('user', UserController::class);
 
 Route::resource('kategori', KategoriAsetController::class);
+
+Route::post('/media/store', [MediaController::class, 'store'])->name('media.store');
+    Route::delete('/media/destroy/{id}', [MediaController::class, 'destroy'])->name('media.destroy');
