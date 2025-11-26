@@ -37,6 +37,7 @@ class AsetController extends Controller
      */
     public function store(Request $request)
     {
+        // 1. Validasi Data Aset + File
         $request->validate([
             'kode_aset' => 'required|unique:asets,kode_aset',
             'nama_aset' => 'required',
@@ -45,13 +46,40 @@ class AsetController extends Controller
             'nilai_perolehan' => 'required|numeric',
             'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
             'lokasi' => 'required',
-            'penanggung_jawab' => 'required'
+            'penanggung_jawab' => 'required',
+            // Validasi File (Nullable artinya boleh tidak ada file)
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx|max:5120',
         ]);
 
-        Aset::create($request->all());
+        // 2. Simpan Data Aset Terlebih Dahulu (Agar dapat ID)
+        $aset = Aset::create($request->except('files')); // Simpan semua kecuali input files
 
-        return redirect()->route('aset.index')
-            ->with('success', 'Data aset berhasil ditambahkan!');
+        // 3. Proses Upload File (Jika ada)
+        if ($request->hasFile('files')) {
+            $path = public_path('uploads');
+            if(!File::exists($path)) {
+                File::makeDirectory($path, 0777, true, true);
+            }
+
+            foreach ($request->file('files') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $mimeType = $file->getClientMimeType();
+
+                $file->move($path, $filename);
+
+                // Simpan ke tabel Media dengan ID aset yang baru dibuat
+                Media::create([
+                    'ref_table' => 'aset',        // Hardcode 'aset'
+                    'ref_id'    => $aset->id, // Ambil ID dari variabel $aset
+                    'file_name' => $filename,
+                    'mime_type' => $mimeType,
+                    'caption'   => $file->getClientOriginalName(),
+                    'sort_order'=> 0
+                ]);
+            }
+        }
+
+        return redirect()->route('aset.index')->with('success', 'Data aset dan file berhasil disimpan!');
     }
 
     /**
@@ -73,8 +101,14 @@ class AsetController extends Controller
      */
     public function edit(Aset $aset)
     {
-        $kategoris = KategoriAset::all(); // Ambil semua kategori
-        return view('pages.aset.edit', compact('aset', 'kategoris'));
+        $kategoris = KategoriAset::all();
+
+        // Ambil file yang sudah ada untuk ditampilkan di form edit
+        $files = Media::where('ref_table', 'aset')
+                      ->where('ref_id', $aset->id)
+                      ->get();
+
+        return view('pages.aset.edit', compact('aset', 'kategoris', 'files'));
     }
 
     /**
@@ -82,6 +116,7 @@ class AsetController extends Controller
      */
     public function update(Request $request, Aset $aset)
     {
+        // 1. Validasi Data Aset + File
         $request->validate([
             'kode_aset' => 'required|unique:asets,kode_aset,' . $aset->id . ',id',
             'nama_aset' => 'required',
@@ -90,10 +125,30 @@ class AsetController extends Controller
             'nilai_perolehan' => 'required|numeric',
             'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
             'lokasi' => 'required',
-            'penanggung_jawab' => 'required'
+            'penanggung_jawab' => 'required',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx|max:5120'
         ]);
 
-        $aset->update($request->all());
+        // 2. Update Data Aset
+        $aset->update($request->except('files'));
+
+        // 3. Proses Upload File BARU (Tambahan)
+        if ($request->hasFile('files')) {
+            $path = public_path('uploads');
+            foreach ($request->file('files') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $mimeType = $file->getClientMimeType();
+                $file->move($path, $filename);
+
+                Media::create([
+                    'ref_table' => 'aset',
+                    'ref_id'    => $aset->aset_id,
+                    'file_name' => $filename,
+                    'mime_type' => $mimeType,
+                    'caption'   => $file->getClientOriginalName(),
+                ]);
+            }
+        }
         return redirect()->route('aset.index')->with('success', 'Data aset berhasil diperbarui!');
     }
 

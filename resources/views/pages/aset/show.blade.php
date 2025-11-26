@@ -8,6 +8,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
                     <h3>Detail Aset: {{ $aset->nama_aset }}</h3>
+                    <p class="text-subtitle text-muted">Informasi lengkap dan dokumen terkait aset.</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -23,16 +24,21 @@
 
         <section class="section">
             <div class="row">
+                {{-- KOLOM KIRI: INFO TEKS --}}
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Informasi Aset</h4>
+                            <h4 class="card-title">Informasi Aset</h4>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
                                 <tr>
-                                    <th>Kode Aset</th>
+                                    <th style="width: 40%">Kode Aset</th>
                                     <td>{{ $aset->kode_aset }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama Aset</th>
+                                    <td>{{ $aset->nama_aset }}</td>
                                 </tr>
                                 <tr>
                                     <th>Kategori</th>
@@ -51,6 +57,14 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th>Nilai Perolehan</th>
+                                    <td>Rp {{ number_format($aset->nilai_perolehan, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tanggal Perolehan</th>
+                                    <td>{{ \Carbon\Carbon::parse($aset->tanggal_perolehan)->translatedFormat('d F Y') }}</td>
+                                </tr>
+                                <tr>
                                     <th>Lokasi</th>
                                     <td>{{ $aset->lokasi }}</td>
                                 </tr>
@@ -58,80 +72,54 @@
                                     <th>Penanggung Jawab</th>
                                     <td>{{ $aset->penanggung_jawab }}</td>
                                 </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>{{ $aset->keterangan ?? '-' }}</td>
+                                </tr>
                             </table>
-                            <div class="mt-3">
-                                <a href="{{ route('aset.index') }}" class="btn btn-secondary">Kembali</a>
+
+                            <div class="mt-4 d-flex justify-content-between">
+                                <a href="{{ route('aset.index') }}" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> Kembali
+                                </a>
+                                {{-- Tombol Edit untuk memudahkan navigasi jika ingin mengubah --}}
+                                <a href="{{ route('aset.edit', $aset->id) }}" class="btn btn-warning">
+                                    <i class="bi bi-pencil-square"></i> Edit Data
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {{-- KOLOM KANAN: LIST FILE (READ ONLY) --}}
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Dokumen & Foto Aset</h4>
+                            <h4 class="card-title">Dokumen & Foto Lampiran</h4>
                         </div>
                         <div class="card-body">
-
-                            {{-- Form Upload --}}
-                            {{-- Ubah action ke media.store --}}
-                            <form action="{{ route('media.store') }}" method="POST" enctype="multipart/form-data"
-                                class="mb-4">
-                                @csrf
-                                <input type="hidden" name="ref_table" value="aset">
-                                <input type="hidden" name="ref_id" value="{{ $aset->id }}">
-
-                                <div class="mb-3">
-                                    <label for="formFileMultiple" class="form-label">Upload File</label>
-                                    <div class="input-group">
-                                        <input class="form-control" type="file" name="files[]" id="formFileMultiple"
-                                            multiple required>
-                                        <button class="btn btn-primary" type="submit"><i class="bi bi-upload"></i>
-                                            Upload</button>
-                                    </div>
-                                    <small class="text-muted">Format: Gambar (jpg,png) atau Dokumen (pdf,doc,xls).</small>
+                            @if($files->isEmpty())
+                                <div class="alert alert-light-secondary color-secondary">
+                                    <i class="bi bi-exclamation-circle"></i> Tidak ada dokumen atau foto yang dilampirkan.
                                 </div>
-                            </form>
-
-                            <hr>
-
-                            @if (session('success'))
-                                <div class="alert alert-success">{{ session('success') }}</div>
-                            @endif
-
-                            <div class="list-group">
-                                @forelse($files as $file)
-                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div class="d-flex align-items-center">
-                                            {{-- Ikon berdasarkan mime_type (opsional, bisa dibuat lebih canggih) --}}
-                                            <i class="bi bi-file-earmark-text me-3 fs-4"></i>
-                                            <div>
-                                                {{-- Gunakan $file->file_name --}}
-                                                <a href="{{ asset('uploads/' . $file->file_name) }}" target="_blank"
-                                                    class="fw-bold text-decoration-none">
-                                                    {{ Str::limit($file->caption, 25) }}
-                                                </a>
-                                                <br>
-                                                <small
-                                                    class="text-muted">{{ $file->created_at->format('d M Y, H:i') }}</small>
+                            @else
+                                <div class="list-group">
+                                    @foreach($files as $file)
+                                        <a href="{{ asset('uploads/' . $file->file_name) }}" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-file-earmark-text fs-3 me-3 text-primary"></i>
+                                                <div>
+                                                    <h6 class="mb-0 text-body">{{ $file->caption }}</h6>
+                                                    <small class="text-muted" style="font-size: 0.8em;">
+                                                        Diunggah: {{ $file->created_at->format('d M Y, H:i') }}
+                                                    </small>
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        {{-- Gunakan media_id untuk hapus --}}
-                                        <form action="{{ route('media.destroy', $file->media_id) }}" method="POST"
-                                            onsubmit="return confirm('Hapus file ini?');">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger"><i
-                                                    class="bi bi-trash"></i></button>
-                                        </form>
-                                    </div>
-                                @empty
-                                    <div class="text-center py-3 text-muted">
-                                        Belum ada file yang diupload.
-                                    </div>
-                                @endforelse
-                            </div>
-
+                                            <span class="badge bg-light-primary text-primary"><i class="bi bi-download"></i> Lihat</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
